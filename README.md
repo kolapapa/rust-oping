@@ -11,3 +11,7 @@ bindings to implement a barebones command-line ping utility.
 
 This crate was written by Chris Fallin &lt;cfallin@c1f.net&gt; and is released
 under the MIT license.
+
+Documentation is available [here](https://cfallin.github.io/rust-oping/oping/),
+and the crate is available as `oping`
+[on crates.io here](https://crates.io/crates/oping/).
