@@ -1,0 +1,13 @@
+liboping bindings for Rust: simple ICMP pings
+=============================================
+
+This crate is a simple Rust binding for [liboping](http://noping.cc/), a
+library that implements basic ICMP ping functionality. These bindings allow a
+Rust program to send ping packets (possibly to multiple hosts in parallel) and
+enumerate the responses.
+
+This crate also includes a very simple program `rustping` that uses the
+bindings to implement a barebones command-line ping utility.
+
+This crate was written by Chris Fallin &lt;cfallin@c1f.net&gt; and is released
+under the MIT license.
