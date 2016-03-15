@@ -20,6 +20,8 @@
 /// # Example
 ///
 /// ```
+/// use oping::{Ping, PingResult};
+///
 /// fn do_pings() -> PingResult<()> {
 ///     let mut ping = Ping::new();
 ///     try!(ping.set_timeout(5.0));  // timeout of 5.0 seconds
