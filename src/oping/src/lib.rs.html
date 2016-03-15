@@ -400,49 +400,53 @@
 <span id="357">357</span>
 <span id="358">358</span>
 <span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>dead_code</span>)]</span>
 
-<span class='doccomment'>/// # oping library bindings</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// This set of bindings allows the use of [liboping](http://noping.cc/) to</span>
-<span class='doccomment'>/// send pings via the ICMP protocol.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// The central type is `Ping`, which wraps a set of options and one or more</span>
-<span class='doccomment'>/// ping sockets open to particular destinations. When `send()` is called, the</span>
-<span class='doccomment'>/// implementation sends a ping to each destination added, and listens for</span>
-<span class='doccomment'>/// replies from all, up to the specified timeout. It then provides an iterator</span>
-<span class='doccomment'>/// over response information from each destination.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Sending a ping via a ping socket usually requires the program to run as</span>
-<span class='doccomment'>/// `root`. This set of bindings has only been tested on Linux.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// This crate contains a small command-line utility `rustping` which</span>
-<span class='doccomment'>/// demonstrates the use of these bindings.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// # Example</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// ```</span>
-<span class='doccomment'>/// fn do_pings() -&gt; PingResult&lt;()&gt; {</span>
-<span class='doccomment'>///     let mut ping = Ping::new();</span>
-<span class='doccomment'>///     try!(ping.set_timeout(5.0));  // timeout of 5.0 seconds</span>
-<span class='doccomment'>///     try!(ping.add_host(&quot;localhost&quot;));  // fails here if socket can&#39;t be created</span>
-<span class='doccomment'>///     try!(ping.add_host(&quot;other_host&quot;));</span>
-<span class='doccomment'>///     try!(ping.add_host(&quot;::1&quot;));  // IPv4 / IPv6 addresses OK</span>
-<span class='doccomment'>///     try!(ping.add_host(&quot;1.2.3.4&quot;));</span>
-<span class='doccomment'>///     let responses = try!(ping.send());</span>
-<span class='doccomment'>///     for resp in responses {</span>
-<span class='doccomment'>///         if resp.dropped &gt; 0 {</span>
-<span class='doccomment'>///             println!(&quot;No response from host: {}&quot;, resp.hostname);</span>
-<span class='doccomment'>///         } else {</span>
-<span class='doccomment'>///             println!(&quot;Response from host {} (address {}): latency {} ms&quot;,</span>
-<span class='doccomment'>///                 resp.hostname, resp.address, resp.latency_ms);</span>
-<span class='doccomment'>///             println!(&quot;    all details: {:?}&quot;, resp);</span>
-<span class='doccomment'>///         }</span>
-<span class='doccomment'>///     }</span>
-<span class='doccomment'>///     Ok(())</span>
-<span class='doccomment'>/// }</span>
-<span class='doccomment'>/// ```</span>
+<span class='doccomment'>//! # oping library bindings</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! This set of bindings allows the use of [liboping](http://noping.cc/) to</span>
+<span class='doccomment'>//! send pings via the ICMP protocol.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! The central type is `Ping`, which wraps a set of options and one or more</span>
+<span class='doccomment'>//! ping sockets open to particular destinations. When `send()` is called, the</span>
+<span class='doccomment'>//! implementation sends a ping to each destination added, and listens for</span>
+<span class='doccomment'>//! replies from all, up to the specified timeout. It then provides an iterator</span>
+<span class='doccomment'>//! over response information from each destination.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! Sending a ping via a ping socket usually requires the program to run as</span>
+<span class='doccomment'>//! `root`. This set of bindings has only been tested on Linux.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! This crate contains a small command-line utility `rustping` which</span>
+<span class='doccomment'>//! demonstrates the use of these bindings.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! # Example</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! ```</span>
+<span class='doccomment'>//! use oping::{Ping, PingResult};</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! fn do_pings() -&gt; PingResult&lt;()&gt; {</span>
+<span class='doccomment'>//!     let mut ping = Ping::new();</span>
+<span class='doccomment'>//!     try!(ping.set_timeout(5.0));  // timeout of 5.0 seconds</span>
+<span class='doccomment'>//!     try!(ping.add_host(&quot;localhost&quot;));  // fails here if socket can&#39;t be created</span>
+<span class='doccomment'>//!     try!(ping.add_host(&quot;other_host&quot;));</span>
+<span class='doccomment'>//!     try!(ping.add_host(&quot;::1&quot;));  // IPv4 / IPv6 addresses OK</span>
+<span class='doccomment'>//!     try!(ping.add_host(&quot;1.2.3.4&quot;));</span>
+<span class='doccomment'>//!     let responses = try!(ping.send());</span>
+<span class='doccomment'>//!     for resp in responses {</span>
+<span class='doccomment'>//!         if resp.dropped &gt; 0 {</span>
+<span class='doccomment'>//!             println!(&quot;No response from host: {}&quot;, resp.hostname);</span>
+<span class='doccomment'>//!         } else {</span>
+<span class='doccomment'>//!             println!(&quot;Response from host {} (address {}): latency {} ms&quot;,</span>
+<span class='doccomment'>//!                 resp.hostname, resp.address, resp.latency_ms);</span>
+<span class='doccomment'>//!             println!(&quot;    all details: {:?}&quot;, resp);</span>
+<span class='doccomment'>//!         }</span>
+<span class='doccomment'>//!     }</span>
+<span class='doccomment'>//!     Ok(())</span>
+<span class='doccomment'>//! }</span>
+<span class='doccomment'>//! ```</span>
 
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>transmute</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>raw</span>::<span class='ident'>c_char</span>;
