@@ -1,47 +1,47 @@
 #![allow(dead_code)]
 
-/// # oping library bindings
-///
-/// This set of bindings allows the use of [liboping](http://noping.cc/) to
-/// send pings via the ICMP protocol.
-///
-/// The central type is `Ping`, which wraps a set of options and one or more
-/// ping sockets open to particular destinations. When `send()` is called, the
-/// implementation sends a ping to each destination added, and listens for
-/// replies from all, up to the specified timeout. It then provides an iterator
-/// over response information from each destination.
-///
-/// Sending a ping via a ping socket usually requires the program to run as
-/// `root`. This set of bindings has only been tested on Linux.
-///
-/// This crate contains a small command-line utility `rustping` which
-/// demonstrates the use of these bindings.
-///
-/// # Example
-///
-/// ```
-/// use oping::{Ping, PingResult};
-///
-/// fn do_pings() -> PingResult<()> {
-///     let mut ping = Ping::new();
-///     try!(ping.set_timeout(5.0));  // timeout of 5.0 seconds
-///     try!(ping.add_host("localhost"));  // fails here if socket can't be created
-///     try!(ping.add_host("other_host"));
-///     try!(ping.add_host("::1"));  // IPv4 / IPv6 addresses OK
-///     try!(ping.add_host("1.2.3.4"));
-///     let responses = try!(ping.send());
-///     for resp in responses {
-///         if resp.dropped > 0 {
-///             println!("No response from host: {}", resp.hostname);
-///         } else {
-///             println!("Response from host {} (address {}): latency {} ms",
-///                 resp.hostname, resp.address, resp.latency_ms);
-///             println!("    all details: {:?}", resp);
-///         }
-///     }
-///     Ok(())
-/// }
-/// ```
+//! # oping library bindings
+//!
+//! This set of bindings allows the use of [liboping](http://noping.cc/) to
+//! send pings via the ICMP protocol.
+//!
+//! The central type is `Ping`, which wraps a set of options and one or more
+//! ping sockets open to particular destinations. When `send()` is called, the
+//! implementation sends a ping to each destination added, and listens for
+//! replies from all, up to the specified timeout. It then provides an iterator
+//! over response information from each destination.
+//!
+//! Sending a ping via a ping socket usually requires the program to run as
+//! `root`. This set of bindings has only been tested on Linux.
+//!
+//! This crate contains a small command-line utility `rustping` which
+//! demonstrates the use of these bindings.
+//!
+//! # Example
+//!
+//! ```
+//! use oping::{Ping, PingResult};
+//!
+//! fn do_pings() -> PingResult<()> {
+//!     let mut ping = Ping::new();
+//!     try!(ping.set_timeout(5.0));  // timeout of 5.0 seconds
+//!     try!(ping.add_host("localhost"));  // fails here if socket can't be created
+//!     try!(ping.add_host("other_host"));
+//!     try!(ping.add_host("::1"));  // IPv4 / IPv6 addresses OK
+//!     try!(ping.add_host("1.2.3.4"));
+//!     let responses = try!(ping.send());
+//!     for resp in responses {
+//!         if resp.dropped > 0 {
+//!             println!("No response from host: {}", resp.hostname);
+//!         } else {
+//!             println!("Response from host {} (address {}): latency {} ms",
+//!                 resp.hostname, resp.address, resp.latency_ms);
+//!             println!("    all details: {:?}", resp);
+//!         }
+//!     }
+//!     Ok(())
+//! }
+//! ```
 
 use std::mem::transmute;
 use std::os::raw::c_char;
