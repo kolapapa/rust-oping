@@ -1,15 +1,56 @@
 #![allow(dead_code)]
 
+/// # oping library bindings
+///
+/// This set of bindings allows the use of [liboping](http://noping.cc/) to
+/// send pings via the ICMP protocol.
+///
+/// The central type is `Ping`, which wraps a set of options and one or more
+/// ping sockets open to particular destinations. When `send()` is called, the
+/// implementation sends a ping to each destination added, and listens for
+/// replies from all, up to the specified timeout. It then provides an iterator
+/// over response information from each destination.
+///
+/// Sending a ping via a ping socket usually requires the program to run as
+/// `root`. This set of bindings has only been tested on Linux.
+///
+/// This crate contains a small command-line utility `rustping` which
+/// demonstrates the use of these bindings.
+///
+/// # Example
+///
+/// ```
+/// fn do_pings() -> PingResult<()> {
+///     let mut ping = Ping::new();
+///     try!(ping.set_timeout(5.0));  // timeout of 5.0 seconds
+///     try!(ping.add_host("localhost"));  // fails here if socket can't be created
+///     try!(ping.add_host("other_host"));
+///     try!(ping.add_host("::1"));  // IPv4 / IPv6 addresses OK
+///     try!(ping.add_host("1.2.3.4"));
+///     let responses = try!(ping.send());
+///     for resp in responses {
+///         if resp.dropped > 0 {
+///             println!("No response from host: {}", resp.hostname);
+///         } else {
+///             println!("Response from host {} (address {}): latency {} ms",
+///                 resp.hostname, resp.address, resp.latency_ms);
+///             println!("    all details: {:?}", resp);
+///         }
+///     }
+///     Ok(())
+/// }
+/// ```
+
 use std::mem::transmute;
 use std::os::raw::c_char;
 use std::ffi::{CStr, CString};
-use std::marker::PhantomData;
 use std::default::Default;
 
 extern crate libc;
 use libc::{AF_INET, AF_INET6};
 use libc::c_int;
 
+/// Address family (IPv4 or IPv6) used to send/receive a ping.
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum AddrFamily {
     IPV4,
@@ -52,7 +93,7 @@ enum PingObj {}
 enum PingObjIter {}
 
 #[link(name =  "oping")]
-extern {
+extern "C" {
     fn ping_construct() -> *mut PingObj;
     fn ping_destroy(obj: *mut PingObj);
     fn ping_setopt(obj: *mut PingObj, opt: PingOption, val: *mut u8) -> i32;
@@ -61,11 +102,17 @@ extern {
     fn ping_host_remove(obj: *mut PingObj, host: *const c_char) -> i32;
     fn ping_iterator_get(obj: *mut PingObj) -> *mut PingObjIter;
     fn ping_iterator_next(obj: *mut PingObjIter) -> *mut PingObjIter;
-    fn ping_iterator_get_info(iter: *mut PingObjIter, info: PingIterInfo,
-                              buf: *mut u8, size: *mut usize) -> i32;
+    fn ping_iterator_get_info(iter: *mut PingObjIter,
+                              info: PingIterInfo,
+                              buf: *mut u8,
+                              size: *mut usize)
+                              -> i32;
     fn ping_get_error(obj: *mut PingObj) -> *const c_char;
 }
 
+/// An error resulting from a ping option-setting or send/receive operation.
+/// May result from an error internal to `liboping` (in which case the error
+/// string is returned) or an error in converting a string hostname.
 #[derive(Debug)]
 pub enum PingError {
     LibOpingError(String),
@@ -74,6 +121,11 @@ pub enum PingError {
 
 pub type PingResult<T> = Result<T, PingError>;
 
+/// A `Ping` struct represents the state of one particular ping instance:
+/// several instance-wide options (timeout, TTL, QoS setting, etc.), and
+/// a list of hostnames/addresses to ping. It is consumed when a single set
+/// of ping packets are sent to the listed destinations, resulting in an
+/// iterator over the responses returned.
 pub struct Ping {
     obj: *mut PingObj,
 }
@@ -96,30 +148,34 @@ macro_rules! try_c {
 
 
 impl Ping {
+    /// Create a new `Ping` context.
     pub fn new() -> Ping {
         let obj = unsafe { ping_construct() };
         assert!(!obj.is_null());
-        Ping {
-            obj: obj,
-        }
+        Ping { obj: obj }
     }
 
+    /// Set the timeout, in seconds, for which we will wait for replies from
+    /// all listed destinations.
     pub fn set_timeout(&mut self, timeout: f64) -> PingResult<()> {
         unsafe {
             try_c!(self.obj,
-                ping_setopt(self.obj, PingOption::TIMEOUT, transmute(&timeout)));
+                   ping_setopt(self.obj, PingOption::TIMEOUT, transmute(&timeout)));
         }
         Ok(())
     }
 
+    /// Set the TTL to set on the ping packets we send. Note that if a packet
+    /// is sent with a TTL that is too low for the route, it may be dropped.
     pub fn set_ttl(&mut self, ttl: i32) -> PingResult<()> {
         unsafe {
             try_c!(self.obj,
-                ping_setopt(self.obj, PingOption::TTL, transmute(&ttl)));
+                   ping_setopt(self.obj, PingOption::TTL, transmute(&ttl)));
         }
         Ok(())
     }
 
+    /// Set the preferred address family to use: IPv4 or IPv6.
     pub fn set_addr_family(&mut self, af: AddrFamily) -> PingResult<()> {
         let fam: c_int = match af {
             AddrFamily::IPV4 => AF_INET,
@@ -127,80 +183,106 @@ impl Ping {
         };
         unsafe {
             try_c!(self.obj,
-                ping_setopt(self.obj, PingOption::AF, transmute(&fam)));
+                   ping_setopt(self.obj, PingOption::AF, transmute(&fam)));
         }
         Ok(())
     }
 
+    /// Set the value of the "quality of service" field to use on outgoing
+    /// ping packets.
     pub fn set_qos(&mut self, qos: u8) -> PingResult<()> {
         unsafe {
             try_c!(self.obj,
-                ping_setopt(self.obj, PingOption::QOS, transmute(&qos)));
+                   ping_setopt(self.obj, PingOption::QOS, transmute(&qos)));
         }
         Ok(())
     }
 
+    /// Add a ping destination. `hostname` may be a hostname to look up via
+    /// the system's name resolution (DNS, etc), or a numeric IPv4 or IPv6
+    /// address.
+    ///
+    /// Note that this method is the point at which a ping socket is actually
+    /// created. Hence, if the program does not have the appropriate permission
+    /// to send ping packets, this is usually where the error will occur.
     pub fn add_host(&mut self, hostname: &str) -> PingResult<()> {
         let cstr = match CString::new(hostname.as_bytes()) {
             Ok(s) => s,
             Err(_) => return Err(PingError::NulByteError),
         };
         unsafe {
-            try_c!(self.obj,
-                ping_host_add(self.obj, cstr.as_ptr()));
+            try_c!(self.obj, ping_host_add(self.obj, cstr.as_ptr()));
         }
         Ok(())
     }
 
+    /// Remove a destination that was previously added. If the hostname does
+    /// not match one that was added previously, an error will be returned.
     pub fn remove_host(&mut self, hostname: &str) -> PingResult<()> {
         let cstr = match CString::new(hostname.as_bytes()) {
             Ok(s) => s,
             Err(_) => return Err(PingError::NulByteError),
         };
         unsafe {
-            try_c!(self.obj,
-                ping_host_add(self.obj, cstr.as_ptr()));
+            try_c!(self.obj, ping_host_add(self.obj, cstr.as_ptr()));
         }
         Ok(())
     }
 
-    // Returns number of replies received.
-    pub fn send(&mut self) -> PingResult<i32> {
+    /// Sends a single ping to all listed destinations, waiting until either
+    /// replies are received from all destinations or the timeout is reached.
+    /// Returns an iterator over all replies.
+    ///
+    /// A `Ping` context may only be used once; hence, this method consumes
+    /// the context.
+    pub fn send(self) -> PingResult<PingIter> {
         unsafe {
             let result = ping_send(self.obj);
             if result < 0 {
                 try_c!(self.obj, result);  // should return error.
-                Ok(0)
+                unreachable!()
             } else {
-                Ok(result)
+                Ok(self.iter())
             }
         }
     }
 
-    pub fn iter<'a>(&'a mut self) -> PingIter<'a> {
+    fn iter(self) -> PingIter {
         let ptr = unsafe { ping_iterator_get(self.obj) };
         PingIter {
+            pingobj: self,
             iter: ptr,
-            _lifetime: PhantomData,
         }
     }
 }
 
-#[derive(Copy, Clone)]
-pub struct PingIter<'a> {
+/// An iterator over ping responses. Will return one `PingItem` for each
+/// destination that was added to the `Ping` context.
+pub struct PingIter {
+    pingobj: Ping,
     iter: *mut PingObjIter,
-    _lifetime: PhantomData<&'a ()>,
 }
 
+/// One ping response from a destination that was added to the `Ping` context.
 #[derive(Clone, Debug, Default)]
 pub struct PingItem {
+    /// The hostname as resolved by the library, possibly resolved to a more
+    /// canonical name.
     pub hostname: String,
+    /// The address as resolved by the library, either IPv4 or IPv6, in textual
+    /// form.
     pub address: String,
+    /// The address family (IPv4 or IPv6) used to ping the destination.
     pub family: AddrFamily,
+    /// The latency of the response, if any, in milliseconds.
     pub latency_ms: f64,
+    /// The dropped-packet count: either 0 or 1.
     pub dropped: u32,
+    /// The sequence number of the ping.
     pub seq: i32,
+    /// The TTL on the received response.
     pub recv_ttl: i32,
+    /// The QoS (quality of service) field on the received response.
     pub recv_qos: u8,
 }
 
@@ -231,7 +313,7 @@ macro_rules! get_num_field {
     )
 }
 
-impl<'a> Iterator for PingIter<'a> {
+impl Iterator for PingIter {
     type Item = PingItem;
     fn next(&mut self) -> Option<PingItem> {
         if self.iter == (0 as *mut PingObjIter) {
@@ -246,7 +328,7 @@ impl<'a> Iterator for PingIter<'a> {
         ret.family = match get_num_field!(self.iter, PingIterInfo::FAMILY, buf, i32) {
             libc::AF_INET => AddrFamily::IPV4,
             libc::AF_INET6 => AddrFamily::IPV6,
-            _ => AddrFamily::IPV4
+            _ => AddrFamily::IPV4,
         };
         ret.latency_ms = get_num_field!(self.iter, PingIterInfo::LATENCY, buf, f64);
         ret.dropped = get_num_field!(self.iter, PingIterInfo::DROPPED, buf, u32);

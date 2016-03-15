@@ -29,10 +29,10 @@ fn main() {
         perror!(p.add_host(&host), "creating ping socket for host");
     }
 
-    perror!(p.send(), "sending ping");
+    let responses = perror!(p.send(), "sending ping");
 
     let mut retcode = 0;
-    for resp in p.iter() {
+    for resp in responses {
         println!("Response: {:?}", resp);
         if resp.dropped > 0 {
             retcode = 1;
