@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Ping` struct in crate `oping`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Ping">
+
+    <title>oping::Ping - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>oping</a></p><script>window.sidebarCurrent = {name: 'Ping', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>oping</a>::<wbr><a class='struct' href=''>Ping</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-102' class='srclink' href='../src/oping/src/lib.rs.html#129-131' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Ping {
+    // some fields omitted
+}</pre><div class='docblock'><p>A <code>Ping</code> struct represents the state of one particular ping instance:
+several instance-wide options (timeout, TTL, QoS setting, etc.), and
+a list of hostnames/addresses to ping. It is consumed when a single set
+of ping packets are sent to the listed destinations, resulting in an
+iterator over the responses returned.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../oping/struct.Ping.html' title='oping::Ping'>Ping</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../oping/struct.Ping.html' title='oping::Ping'>Ping</a></code></h4>
+<div class='docblock'><p>Create a new <code>Ping</code> context.</p>
+</div><h4 id='method.set_timeout' class='method'><code>fn <a href='#method.set_timeout' class='fnname'>set_timeout</a>(&amp;mut self, timeout: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>) -&gt; <a class='type' href='../oping/type.PingResult.html' title='oping::PingResult'>PingResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Set the timeout, in seconds, for which we will wait for replies from
+all listed destinations.</p>
+</div><h4 id='method.set_ttl' class='method'><code>fn <a href='#method.set_ttl' class='fnname'>set_ttl</a>(&amp;mut self, ttl: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='type' href='../oping/type.PingResult.html' title='oping::PingResult'>PingResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Set the TTL to set on the ping packets we send. Note that if a packet
+is sent with a TTL that is too low for the route, it may be dropped.</p>
+</div><h4 id='method.set_addr_family' class='method'><code>fn <a href='#method.set_addr_family' class='fnname'>set_addr_family</a>(&amp;mut self, af: <a class='enum' href='../oping/enum.AddrFamily.html' title='oping::AddrFamily'>AddrFamily</a>) -&gt; <a class='type' href='../oping/type.PingResult.html' title='oping::PingResult'>PingResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Set the preferred address family to use: IPv4 or IPv6.</p>
+</div><h4 id='method.set_qos' class='method'><code>fn <a href='#method.set_qos' class='fnname'>set_qos</a>(&amp;mut self, qos: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>) -&gt; <a class='type' href='../oping/type.PingResult.html' title='oping::PingResult'>PingResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Set the value of the &quot;quality of service&quot; field to use on outgoing
+ping packets.</p>
+</div><h4 id='method.add_host' class='method'><code>fn <a href='#method.add_host' class='fnname'>add_host</a>(&amp;mut self, hostname: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../oping/type.PingResult.html' title='oping::PingResult'>PingResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Add a ping destination. <code>hostname</code> may be a hostname to look up via
+the system&#39;s name resolution (DNS, etc), or a numeric IPv4 or IPv6
+address.</p>
+
+<p>Note that this method is the point at which a ping socket is actually
+created. Hence, if the program does not have the appropriate permission
+to send ping packets, this is usually where the error will occur.</p>
+</div><h4 id='method.remove_host' class='method'><code>fn <a href='#method.remove_host' class='fnname'>remove_host</a>(&amp;mut self, hostname: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../oping/type.PingResult.html' title='oping::PingResult'>PingResult</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Remove a destination that was previously added. If the hostname does
+not match one that was added previously, an error will be returned.</p>
+</div><h4 id='method.send' class='method'><code>fn <a href='#method.send' class='fnname'>send</a>(self) -&gt; <a class='type' href='../oping/type.PingResult.html' title='oping::PingResult'>PingResult</a>&lt;<a class='struct' href='../oping/struct.PingIter.html' title='oping::PingIter'>PingIter</a>&gt;</code></h4>
+<div class='docblock'><p>Sends a single ping to all listed destinations, waiting until either
+replies are received from all destinations or the timeout is reached.
+Returns an iterator over all replies.</p>
+
+<p>A <code>Ping</code> context may only be used once; hence, this method consumes
+the context.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../oping/struct.Ping.html' title='oping::Ping'>Ping</a></code></h3><div class='impl-items'><h4 id='method.drop' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "oping";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
