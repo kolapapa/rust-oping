@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,10 +44,10 @@
 
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>oping</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-0' class='srclink' href='../src/oping/src/lib.rs.html#1-361' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/oping/src/lib.rs.html#1-393' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id='oping-library-bindings' class='section-header'><a href='#oping-library-bindings'>oping library bindings</a></h1>
 <p>This set of bindings allows the use of <a href="http://noping.cc/">liboping</a> to
@@ -89,63 +90,55 @@ demonstrates the use of these bindings.</p>
 }</pre>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.Ping.html'
-                               title='oping::Ping'>Ping</a></td>
-                        <td class='docblock short'>
-                             <p>A <code>Ping</code> struct represents the state of one particular ping instance:
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Ping.html'
+                                  title='oping::Ping'>Ping</a></td>
+                           <td class='docblock short'>
+                                <p>A <code>Ping</code> struct represents the state of one particular ping instance:
 several instance-wide options (timeout, TTL, QoS setting, etc.), and
 a list of hostnames/addresses to ping. It is consumed when a single set
 of ping packets are sent to the listed destinations, resulting in an
 iterator over the responses returned.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PingItem.html'
-                               title='oping::PingItem'>PingItem</a></td>
-                        <td class='docblock short'>
-                             <p>One ping response from a destination that was added to the <code>Ping</code> context.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.PingIter.html'
-                               title='oping::PingIter'>PingIter</a></td>
-                        <td class='docblock short'>
-                             <p>An iterator over ping responses. Will return one <code>PingItem</code> for each
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PingItem.html'
+                                  title='oping::PingItem'>PingItem</a></td>
+                           <td class='docblock short'>
+                                <p>One ping response from a destination that was added to the <code>Ping</code> context.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PingIter.html'
+                                  title='oping::PingIter'>PingIter</a></td>
+                           <td class='docblock short'>
+                                <p>An iterator over ping responses. Will return one <code>PingItem</code> for each
 destination that was added to the <code>Ping</code> context.</p>
-                        </td>
-                    </tr>
-                </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+                           </td>
+                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.AddrFamily.html'
-                               title='oping::AddrFamily'>AddrFamily</a></td>
-                        <td class='docblock short'>
-                             <p>Address family (IPv4 or IPv6) used to send/receive a ping.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.PingError.html'
-                               title='oping::PingError'>PingError</a></td>
-                        <td class='docblock short'>
-                             <p>An error resulting from a ping option-setting or send/receive operation.
-May result from an error internal to <code>liboping</code> (in which case the error
-string is returned) or an error in converting a string hostname.</p>
-                        </td>
-                    </tr>
-                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.AddrFamily.html'
+                                  title='oping::AddrFamily'>AddrFamily</a></td>
+                           <td class='docblock short'>
+                                <p>Address family (IPv4 or IPv6) used to send/receive a ping.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.PingError.html'
+                                  title='oping::PingError'>PingError</a></td>
+                           <td class='docblock short'>
+                                <p>An error resulting from a ping option-setting or send/receive operation.</p>
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='type' href='type.PingResult.html'
-                               title='oping::PingResult'>PingResult</a></td>
-                        <td class='docblock short'>
-                             
-                        </td>
-                    </tr>
-                </table></section>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PingResult.html'
+                                  title='oping::PingResult'>PingResult</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr></table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

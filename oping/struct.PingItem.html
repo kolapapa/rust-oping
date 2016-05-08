@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,10 +44,10 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>oping</a>::<wbr><a class='struct' href=''>PingItem</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-158' class='srclink' href='../src/oping/src/lib.rs.html#270-289' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-177' class='srclink' href='../src/oping/src/lib.rs.html#302-321' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct PingItem {
     pub hostname: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
     pub address: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
@@ -59,27 +60,27 @@
 }</pre><div class='docblock'><p>One ping response from a destination that was added to the <code>Ping</code> context.</p>
 </div><h2 class='fields'>Fields</h2>
 <table><tr class='stab '>
-                                  <td id='structfield.hostname'><code>hostname</code></td><td><div class='docblock'><p>The hostname as resolved by the library, possibly resolved to a more
+                             <td id='structfield.hostname'><code>hostname</code></td><td><div class='docblock'><p>The hostname as resolved by the library, possibly resolved to a more
 canonical name.</p>
 </div></td></tr><tr class='stab '>
-                                  <td id='structfield.address'><code>address</code></td><td><div class='docblock'><p>The address as resolved by the library, either IPv4 or IPv6, in textual
+                             <td id='structfield.address'><code>address</code></td><td><div class='docblock'><p>The address as resolved by the library, either IPv4 or IPv6, in textual
 form.</p>
 </div></td></tr><tr class='stab '>
-                                  <td id='structfield.family'><code>family</code></td><td><div class='docblock'><p>The address family (IPv4 or IPv6) used to ping the destination.</p>
+                             <td id='structfield.family'><code>family</code></td><td><div class='docblock'><p>The address family (IPv4 or IPv6) used to ping the destination.</p>
 </div></td></tr><tr class='stab '>
-                                  <td id='structfield.latency_ms'><code>latency_ms</code></td><td><div class='docblock'><p>The latency of the response, if any, in milliseconds.</p>
+                             <td id='structfield.latency_ms'><code>latency_ms</code></td><td><div class='docblock'><p>The latency of the response, if any, in milliseconds.</p>
 </div></td></tr><tr class='stab '>
-                                  <td id='structfield.dropped'><code>dropped</code></td><td><div class='docblock'><p>The dropped-packet count: either 0 or 1.</p>
+                             <td id='structfield.dropped'><code>dropped</code></td><td><div class='docblock'><p>The dropped-packet count: either 0 or 1.</p>
 </div></td></tr><tr class='stab '>
-                                  <td id='structfield.seq'><code>seq</code></td><td><div class='docblock'><p>The sequence number of the ping.</p>
+                             <td id='structfield.seq'><code>seq</code></td><td><div class='docblock'><p>The sequence number of the ping.</p>
 </div></td></tr><tr class='stab '>
-                                  <td id='structfield.recv_ttl'><code>recv_ttl</code></td><td><div class='docblock'><p>The TTL on the received response.</p>
+                             <td id='structfield.recv_ttl'><code>recv_ttl</code></td><td><div class='docblock'><p>The TTL on the received response.</p>
 </div></td></tr><tr class='stab '>
-                                  <td id='structfield.recv_qos'><code>recv_qos</code></td><td><div class='docblock'><p>The QoS (quality of service) field on the received response.</p>
-</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h3><div class='impl-items'><h4 id='method.default' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#method.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h4>
-<h4 id='method.clone_from' class='method'><span class="since">1.0.0</span><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
+                             <td id='structfield.recv_qos'><code>recv_qos</code></td><td><div class='docblock'><p>The QoS (quality of service) field on the received response.</p>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h3><div class='impl-items'><h4 id='method.default' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../oping/struct.PingItem.html' title='oping::PingItem'>PingItem</a></code></h4>
+<h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><span class="since">1.0.0</span></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
