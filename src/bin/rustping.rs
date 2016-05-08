@@ -8,7 +8,7 @@ macro_rules! perror {
         match $e {
             Ok(x) => x,
             Err(e) => {
-                println!("{}: {:?}", $prefix, e);
+                println!("{}: {}", $prefix, e);
                 std::process::exit(1);
             }
         }

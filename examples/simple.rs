@@ -26,7 +26,7 @@ fn main() {
     match do_stuff() {
         Ok(_) => (),
         Err(e) => {
-            println!("{:?}", e);
+            println!("{}", e);
             ()
         }
     }

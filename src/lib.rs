@@ -45,12 +45,19 @@
 
 use std::mem::transmute;
 use std::os::raw::c_char;
-use std::ffi::{CStr, CString};
+use std::ffi::{CStr, CString, NulError};
 use std::default::Default;
+use std::error;
+use std::fmt;
 
 extern crate libc;
 use libc::{AF_INET, AF_INET6};
 use libc::c_int;
+
+use self::PingError::{
+    LibOpingError,
+    NulByteError,
+};
 
 /// Address family (IPv4 or IPv6) used to send/receive a ping.
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -113,12 +120,37 @@ extern "C" {
 }
 
 /// An error resulting from a ping option-setting or send/receive operation.
-/// May result from an error internal to `liboping` (in which case the error
-/// string is returned) or an error in converting a string hostname.
 #[derive(Debug)]
 pub enum PingError {
+    /// A `liboping` internal error
     LibOpingError(String),
-    NulByteError,
+    /// A `std::ffi::NulError` that occurred while trying to convert a hostname string
+    NulByteError(NulError),
+}
+
+impl fmt::Display for PingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            LibOpingError(ref err) => write!(f, "oping::PingError::LibOpingError: {}", err),
+            NulByteError(ref err) => write!(f, "oping::PingError::NulByteError: {}", err),
+        }
+    }
+}
+
+impl error::Error for PingError {
+    fn description(&self) -> &str {
+        match *self {
+            LibOpingError(_) => "a liboping internal error was encountered",
+            NulByteError(ref e) => e.description(),
+        }
+    }
+
+    fn cause(&self) -> Option<&error::Error> {
+        match *self {
+            NulByteError(ref err) => Some(err),
+            _ => None,
+        }
+    }
 }
 
 pub type PingResult<T> = Result<T, PingError>;
@@ -143,7 +175,7 @@ macro_rules! try_c {
         if $e != 0 {
             let err = CStr::from_ptr(ping_get_error($obj));
             let s = String::from(err.to_str().unwrap());
-            return Err(PingError::LibOpingError(s));
+            return Err(LibOpingError(s));
         }
     )
 }
@@ -210,7 +242,7 @@ impl Ping {
     pub fn add_host(&mut self, hostname: &str) -> PingResult<()> {
         let cstr = match CString::new(hostname.as_bytes()) {
             Ok(s) => s,
-            Err(_) => return Err(PingError::NulByteError),
+            Err(e) => return Err(NulByteError(e)),
         };
         unsafe {
             try_c!(self.obj, ping_host_add(self.obj, cstr.as_ptr()));
@@ -223,7 +255,7 @@ impl Ping {
     pub fn remove_host(&mut self, hostname: &str) -> PingResult<()> {
         let cstr = match CString::new(hostname.as_bytes()) {
             Ok(s) => s,
-            Err(_) => return Err(PingError::NulByteError),
+            Err(e) => return Err(NulByteError(e)),
         };
         unsafe {
             try_c!(self.obj, ping_host_add(self.obj, cstr.as_ptr()));
