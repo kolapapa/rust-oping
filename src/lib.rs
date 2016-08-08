@@ -328,7 +328,7 @@ macro_rules! get_str_field {
             if ping_iterator_get_info($iter, $field, ptr, &mut size as *mut usize) != 0 {
                 return None;
             }
-            CStr::from_ptr(ptr as *const i8).to_str().unwrap().to_string()
+            CStr::from_ptr(ptr as *const _).to_str().unwrap().to_string()
         }
     )
 }
