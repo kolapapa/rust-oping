@@ -1,12 +1,16 @@
 [package]
 name = "oping"
 description = "Rust bindings for liboping, a simple ICMP ping library"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Chris Fallin <cfallin@c1f.net>"]
 repository = "https://github.com/cfallin/rust-oping"
 documentation = "https://cfallin.github.io/rust-oping/oping/"
+build = "build.rs"
 
 license = "MIT"
+
+[build-dependencies]
+gcc = "0.3"
 
 [dependencies]
 libc = "0.2"

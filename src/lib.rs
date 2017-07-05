@@ -1,9 +1,11 @@
-#![allow(dead_code)]
+#![allow(dead_code, non_camel_case_types)]
 
 //! # oping library bindings
 //!
 //! This set of bindings allows the use of [liboping](http://noping.cc/) to
-//! send pings via the ICMP protocol.
+//! send pings via the ICMP protocol. (The library is included inside the
+//! crate, so it is not necessary to install the library on your system
+//! separately.)
 //!
 //! The central type is `Ping`, which wraps a set of options and one or more
 //! ping sockets open to particular destinations. When `send()` is called, the
@@ -101,7 +103,6 @@ enum PingIterInfo {
 enum PingObj {}
 enum PingObjIter {}
 
-#[link(name =  "oping")]
 extern "C" {
     fn ping_construct() -> *mut PingObj;
     fn ping_destroy(obj: *mut PingObj);
