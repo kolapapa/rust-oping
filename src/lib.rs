@@ -223,6 +223,19 @@ impl Ping {
         Ok(())
     }
 
+    /// Set the outgoing network device to be used.
+    pub fn set_device(&mut self, dev: &str) -> PingResult<()> {
+        let cstr = match CString::new(dev.as_bytes()) {
+            Ok(s) => s,
+            Err(e) => return Err(NulByteError(e)),
+        };
+        unsafe {
+            try_c!(self.obj,
+                   ping_setopt(self.obj, PingOption::DEVICE, cstr.as_ptr() as *mut u8));
+        }
+        Ok(())
+    }
+
     /// Set the value of the "quality of service" field to use on outgoing
     /// ping packets.
     pub fn set_qos(&mut self, qos: u8) -> PingResult<()> {
