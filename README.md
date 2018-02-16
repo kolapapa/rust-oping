@@ -19,3 +19,10 @@ under the MIT license.
 Documentation is available [here](https://cfallin.github.io/rust-oping/oping/),
 and the crate is available as `oping`
 [on crates.io here](https://crates.io/crates/oping/).
+
+*NOTE*: sending ping packets requires either running as `root` or setting a
+capability on your binary, at least on Linux. This is a restriction enforced by
+the system, not by this crate. To set the capability, run the following as
+root:
+
+    $ setcap cap_net_raw+ep $MY_BINARY    # allow binary to send ping packets
