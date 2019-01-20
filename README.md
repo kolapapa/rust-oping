@@ -11,7 +11,12 @@ bindings to implement a barebones command-line ping utility.
 
 This crate includes `liboping` in its source tree (as a submodule) and builds
 it into the Rust library, so there is no need to build and install it
-separately.
+separately. However, there are several dependencies required to build this:
+
+* GNU autotools: `libtool`, `autoconf`, and `automake` (These can be found as
+  packages in most GNU/Linux distributions, and in OS X's Homebrew system, for
+  example.)
+* A system C compiler (`gcc` or equivalent)
 
 This crate was written by Chris Fallin &lt;cfallin@c1f.net&gt; and is released
 under the MIT license.
