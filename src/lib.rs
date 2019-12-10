@@ -167,7 +167,9 @@ pub struct Ping {
 
 impl Drop for Ping {
     fn drop(&mut self) {
+        println!("[+] start destory PingObj...");
         unsafe { ping_destroy(self.obj) };
+        println!("[+] destory success.");
     }
 }
 
